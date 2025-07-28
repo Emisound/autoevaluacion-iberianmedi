@@ -1,0 +1,21 @@
+body {
+  font-family: sans-serif;
+  background-color: #f4f4f4;
+  margin: 0;
+  padding: 0;
+}
+input, textarea, button {
+  font-family: inherit;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+button {
+  background-color: #333;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+textarea {
+  resize: vertical;
+}
