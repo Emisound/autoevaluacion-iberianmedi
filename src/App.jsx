@@ -2,8 +2,7 @@ import './index.css';
 import { useState, useEffect } from 'react';
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
-
-const logo = 'https://cdn.jsdelivr.net/gh/iberianmedia/assets@main/IM_icon_color_fondo_negro.png';
+import logo from 'https://cdn.jsdelivr.net/gh/iberianmedia/assets@main/IM_icon_color_fondo_negro.png';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD0oQUhF2Fpg4u_m5mnebR7BLJkKfKFNHQ",
@@ -18,169 +17,163 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const CATEGORIES = [
-  { key: 'edicion_shorts', label: 'Edición - Shorts para redes', icon: '✂️' },
-  { key: 'edicion_corporativo', label: 'Edición - Vídeo corporativo', icon: '📈' },
-  { key: 'edicion_podcast', label: 'Edición - Podcast', icon: '🎧' },
-  { key: 'edicion_recaps', label: 'Edición - Montaje Recaps', icon: '🔁' },
-  { key: 'camara', label: 'Operador de cámara', icon: '📷' },
-  { key: 'grafismos', label: 'Grafismos', icon: '🎨' },
-  { key: 'animacion2d', label: 'Animación 2D', icon: '🌀' },
-  { key: 'aftereffects', label: 'After Effects', icon: '✨' },
-  { key: 'color', label: 'Color', icon: '🌈' },
-  { key: 'ia', label: 'IA aplicada a vídeo', icon: '🤖' },
-  { key: 'realizacion', label: 'Realización (Dirección)', icon: '🎬' },
-  { key: 'realizacion_vivo', label: 'Realización en vivo', icon: '📺' },
-  { key: 'streaming', label: 'Streaming', icon: '🌐' },
-  { key: 'iluminacion', label: 'Iluminación', icon: '💡' },
-  { key: 'arte', label: 'Arte', icon: '🖌️' },
-  { key: 'dof', label: 'Director de Fotografía', icon: '🎥' },
+const competencias = [
+  {
+    categoria: "Edición",
+    subcategorias: [
+      "Shorts para redes",
+      "Video corporativo",
+      "Podcast",
+      "Montaje Recaps",
+    ],
+    icono: "🎬"
+  },
+  {
+    categoria: "Operador de cámara",
+    subcategorias: [""],
+    icono: "🎥"
+  },
+  {
+    categoria: "Grafismos",
+    subcategorias: [""],
+    icono: "💻"
+  },
+  {
+    categoria: "Animación 2D",
+    subcategorias: [""],
+    icono: "🌊"
+  },
+  {
+    categoria: "After Effects",
+    subcategorias: [""],
+    icono: "✨"
+  },
+  {
+    categoria: "Color",
+    subcategorias: [""],
+    icono: "🎨"
+  },
+  {
+    categoria: "IA",
+    subcategorias: [""],
+    icono: "🤖"
+  },
+  {
+    categoria: "Realización",
+    subcategorias: ["Dirección de pieza audiovisual"],
+    icono: "🎬"
+  },
+  {
+    categoria: "Realización en vivo",
+    subcategorias: [""],
+    icono: "📺"
+  },
+  {
+    categoria: "Streaming",
+    subcategorias: [""],
+    icono: "📡"
+  },
+  {
+    categoria: "Iluminación",
+    subcategorias: [""],
+    icono: "💡"
+  },
+  {
+    categoria: "Arte",
+    subcategorias: [""],
+    icono: "🖼️"
+  },
+  {
+    categoria: "Director de Fotografía",
+    subcategorias: [""],
+    icono: "🎞️"
+  },
 ];
 
-function AutoevaluacionApp() {
-  const [nombre, setNombre] = useState('');
-  const [resultados, setResultados] = useState({});
-  const [comentarios, setComentarios] = useState({});
-  const [evaluaciones, setEvaluaciones] = useState([]);
-  const [modoAdmin, setModoAdmin] = useState(false);
-  const [loginID, setLoginID] = useState('');
-  const [loginPass, setLoginPass] = useState('');
-  const [errorLogin, setErrorLogin] = useState('');
-  const [hoverValues, setHoverValues] = useState({});
-  const [filtroNombre, setFiltroNombre] = useState('');
+const niveles = ["😵", "😕", "😐", "😊", "🤩"];
 
-  const enviarEvaluacion = async () => {
-    if (!nombre) return alert('Introduce tu nombre');
-    const nuevaEval = { nombre, resultados, comentarios, fecha: new Date().toISOString() };
-    await addDoc(collection(db, "evaluaciones"), nuevaEval);
-    setNombre('');
-    setResultados({});
-    setComentarios({});
-    alert('¡Evaluación enviada!');
+function App() {
+  const [formulario, setFormulario] = useState({});
+  const [nombre, setNombre] = useState("");
+
+  const manejarCambio = (clave, valor) => {
+    setFormulario(prev => ({
+      ...prev,
+      [clave]: {
+        ...prev[clave],
+        valor
+      }
+    }));
   };
 
-  const entrarComoAdmin = async () => {
-    if (loginID === 'administrador' && loginPass === 'Khloe') {
-      const snapshot = await getDocs(collection(db, "evaluaciones"));
-      const data = snapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
-      setEvaluaciones(data);
-      setModoAdmin(true);
-      setErrorLogin('');
-    } else {
-      setErrorLogin('Credenciales incorrectas');
+  const manejarComentario = (clave, comentario) => {
+    setFormulario(prev => ({
+      ...prev,
+      [clave]: {
+        ...prev[clave],
+        comentario
+      }
+    }));
+  };
+
+  const enviarFormulario = async (e) => {
+    e.preventDefault();
+    try {
+      await addDoc(collection(db, "auto-evaluaciones"), {
+        nombre,
+        evaluaciones: formulario,
+        fecha: new Date().toISOString()
+      });
+      alert("¡Autoevaluación enviada con éxito!");
+      setNombre("");
+      setFormulario({});
+    } catch (error) {
+      console.error("Error al enviar: ", error);
+      alert("Hubo un error al enviar el formulario.");
     }
   };
-
-  const eliminarEvaluacion = async (id) => {
-    if (window.confirm('¿Estás seguro de que quieres eliminar esta evaluación?')) {
-      await deleteDoc(doc(db, "evaluaciones", id));
-      setEvaluaciones(evaluaciones.filter(e => e.id !== id));
-    }
-  };
-
-  const promedio = (key) => {
-    const valores = evaluaciones.map(e => parseInt(e.resultados[key] || 0)).filter(v => v > 0);
-    if (valores.length === 0) return '-';
-    return (valores.reduce((a, b) => a + b, 0) / valores.length).toFixed(1);
-  };
-
-  if (modoAdmin) {
-    const evaluacionesFiltradas = filtroNombre
-      ? evaluaciones.filter(e => e.nombre.toLowerCase().includes(filtroNombre.toLowerCase()))
-      : evaluaciones;
-
-    return (
-      <div className="p-4">
-        <img src={logo} alt="Logo Iberian Media" className="h-12 mb-4" />
-        <h1 className="text-2xl font-bold mb-4">Panel de Administrador</h1>
-        <input
-          type="text"
-          placeholder="Filtrar por nombre..."
-          className="mb-4 p-2 border rounded w-full sm:w-1/2"
-          value={filtroNombre}
-          onChange={(e) => setFiltroNombre(e.target.value)}
-        />
-        <h2 className="text-xl font-semibold">Promedios por categoría</h2>
-        <ul className="mb-6 list-disc pl-6">
-          {CATEGORIES.map(cat => (
-            <li key={cat.key}>{cat.label}: {promedio(cat.key)}</li>
-          ))}
-        </ul>
-        <h2 className="text-xl font-semibold">Evaluaciones individuales</h2>
-        {evaluacionesFiltradas.map((e) => (
-          <div key={e.id} className="border p-4 my-2 rounded">
-            <div className="flex justify-between items-center">
-              <h3 className="font-bold">{e.nombre}</h3>
-              <button className="text-red-600 text-sm" onClick={() => eliminarEvaluacion(e.id)}>Eliminar</button>
-            </div>
-            <ul className="text-sm list-disc pl-5">
-              {Object.keys(e.resultados).map(k => (
-                <li key={k}><strong>{CATEGORIES.find(c => c.key === k)?.label}:</strong> {e.resultados[k]}<br/>{e.comentarios[k] && <em>Comentario: {e.comentarios[k]}</em>}</li>
-              ))}
-            </ul>
-          </div>
-        ))}
-      </div>
-    );
-  }
 
   return (
-    <div className="p-4 grid gap-4 max-w-screen-md mx-auto">
-      <img src={logo} alt="Logo Iberian Media" className="h-12 mb-4" />
-      <h1 className="text-2xl font-bold">Autoevaluación de Filmmakers</h1>
-      <input
-        type="text"
-        placeholder="Tu nombre"
-        className="w-full mb-2 p-2 border rounded"
-        value={nombre}
-        onChange={(e) => setNombre(e.target.value)}
-      />
-      {CATEGORIES.map(cat => (
-        <div key={cat.key} className="border rounded p-3">
-          <label className="block font-semibold mb-1">{cat.label}</label>
-          <div className="flex flex-wrap sm:flex-nowrap gap-1 mb-2">
-            {[1, 2, 3, 4, 5].map(n => (
-              <span
-                key={n}
-                className={`text-2xl cursor-pointer transition-transform duration-150 transform hover:scale-125 ${n <= (hoverValues[cat.key] ?? resultados[cat.key] ?? 0) ? 'opacity-100' : 'opacity-30'}`}
-                onMouseEnter={() => setHoverValues({ ...hoverValues, [cat.key]: n })}
-                onMouseLeave={() => setHoverValues({ ...hoverValues, [cat.key]: undefined })}
-                onClick={() => setResultados({ ...resultados, [cat.key]: n })}
-              >{cat.icon}</span>
-            ))}
-          </div>
-          <textarea
-            placeholder="Comentario opcional"
-            className="w-full mb-2 p-2 border rounded"
-            value={comentarios[cat.key] || ''}
-            onChange={(e) => setComentarios({ ...comentarios, [cat.key]: e.target.value })}
-          />
-        </div>
-      ))}
-      <button className="w-full sm:w-auto bg-green-600 text-white py-2 rounded" onClick={enviarEvaluacion}>Enviar Evaluación</button>
+    <div className="container">
+      <img src={logo} alt="Logo Iberian Media" className="logo" />
+      <h1>Autoevaluación de Filmmakers</h1>
+      <form onSubmit={enviarFormulario}>
+        <label>Tu nombre</label>
+        <input type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
 
-      <div className="mt-8">
-        <h2 className="font-semibold mb-2">¿Eres administrador?</h2>
-        <input
-          type="text"
-          placeholder="ID"
-          className="w-full sm:w-auto mb-2 p-2 border rounded mr-2"
-          value={loginID}
-          onChange={(e) => setLoginID(e.target.value)}
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          className="w-full sm:w-auto mb-2 p-2 border rounded mr-2"
-          value={loginPass}
-          onChange={(e) => setLoginPass(e.target.value)}
-        />
-        <button onClick={entrarComoAdmin} className="w-full sm:w-auto bg-blue-600 text-white py-2 px-4 rounded">Entrar</button>
-        {errorLogin && <p className="text-red-600 mt-2">{errorLogin}</p>}
-      </div>
+        {competencias.map((comp) =>
+          comp.subcategorias.map((sub, i) => {
+            const clave = `${comp.categoria} - ${sub || comp.categoria}`;
+            const datos = formulario[clave] || {};
+
+            return (
+              <div key={clave}>
+                <label>{clave}</label>
+                <div className="emoji-container">
+                  {niveles.map((nivel, idx) => (
+                    <button
+                      key={idx}
+                      type="button"
+                      className={`emoji-button ${datos.valor === nivel ? "selected" : ""}`}
+                      onClick={() => manejarCambio(clave, nivel)}
+                    >
+                      {nivel}
+                    </button>
+                  ))}
+                </div>
+                <textarea
+                  placeholder="Comentario opcional"
+                  value={datos.comentario || ""}
+                  onChange={e => manejarComentario(clave, e.target.value)}
+                />
+              </div>
+            );
+          })
+        )}
+        <button type="submit">Enviar</button>
+      </form>
     </div>
   );
 }
 
-export default AutoevaluacionApp;
-
+export default App;
