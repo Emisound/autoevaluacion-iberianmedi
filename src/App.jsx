@@ -102,6 +102,11 @@ function App() {
                       onClick={() => manejarCambio(clave, nivel)}
                       onMouseEnter={() => setHover(prev => ({ ...prev, [clave]: nivel }))}
                       onMouseLeave={() => setHover(prev => ({ ...prev, [clave]: 0 }))}
+                      style={{
+                        opacity: (hoverValue >= nivel || datos.valor >= nivel) ? 1 : 0.3,
+                        transform: hoverValue === nivel ? 'scale(1.2)' : 'scale(1)',
+                        transition: 'transform 0.2s ease, opacity 0.3s ease'
+                      }}
                     >
                       {comp.icono}
                     </span>
