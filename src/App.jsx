@@ -1,7 +1,8 @@
 import './index.css';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
+import { getFirestore, collection, addDoc } from "firebase/firestore";
+import logo from './assets/IM_icon_color_fondo_negro.png';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD0oQUhF2Fpg4u_m5mnebR7BLJkKfKFNHQ",
@@ -134,11 +135,16 @@ function App() {
 
   return (
     <div className="container">
-      <img src="https://cdn.jsdelivr.net/gh/iberianmedia/assets@main/IM_icon_color_fondo_negro.png" alt="Logo Iberian Media" className="logo" />
+      <img src={logo} alt="Logo Iberian Media" className="logo" />
       <h1>Autoevaluación de Filmmakers</h1>
       <form onSubmit={enviarFormulario}>
         <label>Tu nombre</label>
-        <input type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
+        <input
+          type="text"
+          value={nombre}
+          onChange={e => setNombre(e.target.value)}
+          required
+        />
 
         {competencias.map((comp) =>
           comp.subcategorias.map((sub, i) => {
@@ -147,7 +153,7 @@ function App() {
 
             return (
               <div key={clave}>
-                <label>{clave}</label>
+                <label>{comp.icono} {clave}</label>
                 <div className="emoji-container">
                   {niveles.map((nivel, idx) => (
                     <button
