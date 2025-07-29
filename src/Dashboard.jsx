@@ -78,20 +78,20 @@ function Dashboard() {
   return (
     <div className="container">
       <img src={logo} alt="Logo Iberian Media" className="logo" />
-      <h1>Dashboard de Administrador</h1>
+      <h1 className="main-title">Dashboard de Administrador</h1>
 
       {Object.keys(promedios).length > 0 && (
         <div className="dashboard-promedios">
-          <h2>Promedio por Categoría</h2>
-          <ul>
+          <h2 className="section-title">Promedio por Categoría</h2>
+          <ul className="promedios-list">
             {Object.entries(promedios).map(([categoria, promedio]) => {
               const icono = iconos[categoria] || '⭐';
               const promedioValor = parseFloat(promedio);
-              const colorStyle = promedioValor <= 2.99 ? { color: 'red', fontWeight: 'bold' } : {};
+              const isBajo = promedioValor <= 2.99;
               return (
-                <li key={categoria}>
-                  <strong>{categoria}</strong>: {icono} <span style={colorStyle}>({promedio}/5)</span>
-                  {promedioValor <= 2.99 && <span style={{ color: 'red', marginLeft: '8px' }}>Necesita mejorar</span>}
+                <li key={categoria} className="promedio-item">
+                  <strong>{categoria}</strong>: {icono} <span className={isBajo ? "puntuacion-baja" : "puntuacion-normal"}>({promedio}/5)</span>
+                  {isBajo && <span className="nota-mejora">Necesita mejorar</span>}
                 </li>
               );
             })}
@@ -105,21 +105,21 @@ function Dashboard() {
         <div className="dashboard-list">
           {evaluaciones.map((evalItem) => (
             <div key={evalItem.id} className="dashboard-item">
-              <h2>{evalItem.nombre}</h2>
-              <ul>
+              <h2 className="eval-nombre">{evalItem.nombre}</h2>
+              <ul className="eval-list">
                 {Object.entries(evalItem.evaluaciones).map(([clave, datos]) => {
                   const categoria = clave.split(" - ")[0];
                   const icono = iconos[categoria] || "⭐";
                   return (
-                    <li key={clave}>
-                      <strong>{clave}</strong>: {icono.repeat(datos.valor)} ({datos.valor}/5)
+                    <li key={clave} className="eval-item">
+                      <span className="eval-clave">{clave}</span>: {icono.repeat(datos.valor)} <span className="eval-puntos">({datos.valor}/5)</span>
                       <br />
-                      <em>{datos.comentario}</em>
+                      <em className="eval-comentario">{datos.comentario}</em>
                     </li>
                   );
                 })}
               </ul>
-              <button onClick={() => eliminarEvaluacion(evalItem.id)}>Eliminar</button>
+              <button className="btn-eliminar" onClick={() => eliminarEvaluacion(evalItem.id)}>Eliminar</button>
             </div>
           ))}
         </div>
@@ -129,5 +129,6 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
 
 
