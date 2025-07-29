@@ -1,83 +1,124 @@
+/* index.css */
+
 body {
-  font-family: sans-serif;
-  background-color: #f5f5f5;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  background-color: #f5f6fa;
   margin: 0;
   padding: 0;
 }
 
 .container {
-  max-width: 700px;
+  max-width: 960px;
   margin: 2rem auto;
+  background: #fff;
   padding: 2rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
   display: block;
-  margin: 0 auto 1rem;
-  max-width: 150px;
+  margin: 0 auto 1rem auto;
+  max-width: 120px;
 }
 
-h1 {
+.main-title {
   text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
   color: #333;
 }
 
-label {
-  display: block;
-  margin-top: 1.5rem;
+.section-title {
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: #444;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 0.3rem;
+}
+
+.promedios-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 2rem;
+}
+
+.promedio-item {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+  line-height: 1.4;
+}
+
+.puntuacion-baja {
+  color: #c0392b;
+  font-weight: bold;
+}
+
+.puntuacion-normal {
+  color: #2c3e50;
+}
+
+.nota-mejora {
+  margin-left: 0.5rem;
+  font-size: 0.9rem;
+  color: #c0392b;
+  font-weight: bold;
+}
+
+.dashboard-item {
+  border: 1px solid #e0e0e0;
+  background-color: #fafafa;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+}
+
+.eval-nombre {
+  font-size: 1.2rem;
+  margin-bottom: 0.8rem;
+  color: #2c3e50;
+}
+
+.eval-list {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 1rem;
+}
+
+.eval-item {
+  margin-bottom: 0.6rem;
+  line-height: 1.5;
+}
+
+.eval-clave {
   font-weight: bold;
   color: #333;
 }
 
-input[type="text"],
-textarea {
-  width: 100%;
-  padding: 0.5rem;
-  margin-top: 0.3rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-  font-size: 1rem;
+.eval-puntos {
+  font-weight: bold;
+  margin-left: 0.3rem;
 }
 
-.emoji-container {
-  margin-top: 0.5rem;
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
+.eval-comentario {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin-top: 0.2rem;
+  padding-left: 1.5rem;
 }
 
-.emoji-button {
-  background: none;
-  border: none;
-  font-size: 1.5rem;
-  cursor: pointer;
-  transition: transform 0.1s ease-in-out;
-}
-
-.emoji-button:hover {
-  transform: scale(1.2);
-}
-
-.emoji-button.selected {
-  outline: 2px solid #0070f3;
-  border-radius: 50%;
-}
-
-button[type="submit"] {
-  margin-top: 2rem;
-  padding: 0.7rem 1.2rem;
-  font-size: 1rem;
-  background-color: #0070f3;
+.btn-eliminar {
+  background-color: #e74c3c;
   color: white;
   border: none;
+  padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
 }
 
-button[type="submit"]:hover {
-  background-color: #005bb5;
+.btn-eliminar:hover {
+  background-color: #c0392b;
 }
