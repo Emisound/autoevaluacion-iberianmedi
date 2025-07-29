@@ -83,6 +83,17 @@ function Dashboard() {
       <img src={logo} alt="Logo Iberian Media" className="logo" />
       <h1 className="main-title">Dashboard de Administrador</h1>
 
+      <div className="explicativo">
+        <p>Por favor, rellena honestamente tus aptitudes en cada categoría. Utiliza la siguiente guía para puntuarte:</p>
+        <ul>
+          <li><strong>1️⃣ – Sin experiencia / Nulo:</strong> No tengo conocimientos o experiencia práctica en esta área. Nunca lo he hecho o no sé cómo empezar.</li>
+          <li><strong>2️⃣ – Nivel básico / Principiante:</strong> He hecho alguna prueba o tengo una idea general, pero me falta confianza y necesito apoyo constante. Requiere supervisión.</li>
+          <li><strong>3️⃣ – Nivel intermedio / Autónomo:</strong> Puedo trabajar en esta tarea de forma autónoma en contextos sencillos. Me manejo bien, aunque aún me falta fluidez en situaciones más complejas.</li>
+          <li><strong>4️⃣ – Nivel avanzado / Experto funcional:</strong> Domino esta aptitud con seguridad. Soy eficiente, puedo resolver problemas y tengo criterio propio. Puedo aportar valor y mejorar procesos.</li>
+          <li><strong>5️⃣ – Especialista / Referente:</strong> Soy experto en esta área. Domino todas sus facetas, puedo liderar proyectos relacionados y ayudar a otros a mejorar. Me consultan por mi criterio.</li>
+        </ul>
+      </div>
+
       {Object.keys(promedios).length > 0 && (
         <div className="dashboard-promedios">
           <h2 className="section-title">Promedio por Categoría</h2>
