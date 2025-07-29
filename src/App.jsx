@@ -2,8 +2,6 @@ import './index.css';
 import { useState, useEffect } from 'react';
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "firebase/firestore";
-<img src="https://cdn.jsdelivr.net/gh/iberianmedia/assets@main/IM_icon_color_fondo_negro.png" alt="Logo Iberian Media" className="logo" />
-
 
 const firebaseConfig = {
   apiKey: "AIzaSyD0oQUhF2Fpg4u_m5mnebR7BLJkKfKFNHQ",
@@ -136,7 +134,7 @@ function App() {
 
   return (
     <div className="container">
-      <img src={logo} alt="Logo Iberian Media" className="logo" />
+      <img src="https://cdn.jsdelivr.net/gh/iberianmedia/assets@main/IM_icon_color_fondo_negro.png" alt="Logo Iberian Media" className="logo" />
       <h1>Autoevaluación de Filmmakers</h1>
       <form onSubmit={enviarFormulario}>
         <label>Tu nombre</label>
