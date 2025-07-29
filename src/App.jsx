@@ -2,6 +2,7 @@ import './index.css';
 import { useState } from 'react';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { useNavigate } from 'react-router-dom';
 import logo from './assets/IM_icon_color_fondo_negro.png';
 
 const firebaseConfig = {
@@ -37,6 +38,9 @@ function App() {
   const [formulario, setFormulario] = useState({});
   const [nombre, setNombre] = useState("");
   const [hover, setHover] = useState({});
+  const [adminID, setAdminID] = useState("");
+  const [adminPass, setAdminPass] = useState("");
+  const navigate = useNavigate();
 
   const manejarCambio = (clave, valor) => {
     setFormulario(prev => ({
@@ -75,6 +79,14 @@ function App() {
     }
   };
 
+  const accederComoAdmin = () => {
+    if (adminID === "administrador" && adminPass === "Khloe") {
+      navigate("/dashboard");
+    } else {
+      alert("Credenciales incorrectas");
+    }
+  };
+
   return (
     <div className="container">
       <img src={logo} alt="Logo Iberian Media" className="logo" />
@@ -96,9 +108,7 @@ function App() {
                   {[1, 2, 3, 4, 5].map((nivel) => (
                     <span
                       key={nivel}
-                      className={`emoji-button ${
-                        (hoverValue >= nivel || datos.valor >= nivel) ? "selected" : ""
-                      }`}
+                      className={`emoji-button ${(hoverValue >= nivel || datos.valor >= nivel) ? "selected" : ""}`}
                       onClick={() => manejarCambio(clave, nivel)}
                       onMouseEnter={() => setHover(prev => ({ ...prev, [clave]: nivel }))}
                       onMouseLeave={() => setHover(prev => ({ ...prev, [clave]: 0 }))}
@@ -123,9 +133,17 @@ function App() {
         )}
         <button type="submit">Enviar</button>
       </form>
+
+      <div className="admin-login">
+        <h2>Acceso Administrador</h2>
+        <input type="text" placeholder="ID" value={adminID} onChange={e => setAdminID(e.target.value)} />
+        <input type="password" placeholder="Contraseña" value={adminPass} onChange={e => setAdminPass(e.target.value)} />
+        <button onClick={accederComoAdmin}>Acceder</button>
+      </div>
     </div>
   );
 }
 
 export default App;
+
 
