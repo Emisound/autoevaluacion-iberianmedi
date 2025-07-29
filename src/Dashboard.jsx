@@ -35,12 +35,34 @@ const iconos = {
 
 function Dashboard() {
   const [evaluaciones, setEvaluaciones] = useState([]);
+  const [promedios, setPromedios] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
       const querySnapshot = await getDocs(collection(db, "auto-evaluaciones"));
       const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setEvaluaciones(data);
+
+      const acumulador = {};
+      const conteo = {};
+
+      data.forEach((evalItem) => {
+        Object.entries(evalItem.evaluaciones).forEach(([clave, datos]) => {
+          const categoria = clave.split(" - ")[0];
+          if (!acumulador[categoria]) {
+            acumulador[categoria] = 0;
+            conteo[categoria] = 0;
+          }
+          acumulador[categoria] += datos.valor;
+          conteo[categoria]++;
+        });
+      });
+
+      const calculado = {};
+      Object.keys(acumulador).forEach(categoria => {
+        calculado[categoria] = (acumulador[categoria] / conteo[categoria]).toFixed(2);
+      });
+      setPromedios(calculado);
     };
     fetchData();
   }, []);
@@ -57,6 +79,20 @@ function Dashboard() {
     <div className="container">
       <img src={logo} alt="Logo Iberian Media" className="logo" />
       <h1>Dashboard de Administrador</h1>
+
+      {Object.keys(promedios).length > 0 && (
+        <div className="dashboard-promedios">
+          <h2>Promedio por Categoría</h2>
+          <ul>
+            {Object.entries(promedios).map(([categoria, promedio]) => (
+              <li key={categoria}>
+                <strong>{categoria}</strong>: {iconos[categoria] || '⭐'} ({promedio}/5)
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {evaluaciones.length === 0 ? (
         <p>No hay evaluaciones registradas todavía.</p>
       ) : (
@@ -87,3 +123,4 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
