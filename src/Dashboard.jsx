@@ -17,6 +17,22 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
+const iconos = {
+  "Edición": "🎬",
+  "Operador de cámara": "🎥",
+  "Grafismos": "💻",
+  "Animación 2D": "🌊",
+  "After Effects": "✨",
+  "Color": "🎨",
+  "IA": "🤖",
+  "Realización": "🎬",
+  "Realización en vivo": "📺",
+  "Streaming": "📡",
+  "Iluminación": "💡",
+  "Arte": "🖼️",
+  "Director de Fotografía": "🎞️"
+};
+
 function Dashboard() {
   const [evaluaciones, setEvaluaciones] = useState([]);
 
@@ -30,8 +46,11 @@ function Dashboard() {
   }, []);
 
   const eliminarEvaluacion = async (id) => {
-    await deleteDoc(doc(db, "auto-evaluaciones", id));
-    setEvaluaciones(evaluaciones.filter(e => e.id !== id));
+    const confirmacion = window.confirm("¿Estás seguro de que quieres eliminar esta evaluación?");
+    if (confirmacion) {
+      await deleteDoc(doc(db, "auto-evaluaciones", id));
+      setEvaluaciones(evaluaciones.filter(e => e.id !== id));
+    }
   };
 
   return (
@@ -46,12 +65,17 @@ function Dashboard() {
             <div key={evalItem.id} className="dashboard-item">
               <h2>{evalItem.nombre}</h2>
               <ul>
-                {Object.entries(evalItem.evaluaciones).map(([clave, datos]) => (
-                  <li key={clave}>
-                    <strong>{clave}</strong>: {datos.valor} ⭐<br />
-                    <em>{datos.comentario}</em>
-                  </li>
-                ))}
+                {Object.entries(evalItem.evaluaciones).map(([clave, datos]) => {
+                  const categoria = clave.split(" - ")[0];
+                  const icono = iconos[categoria] || "⭐";
+                  return (
+                    <li key={clave}>
+                      <strong>{clave}</strong>: {icono.repeat(datos.valor)} ({datos.valor}/5)
+                      <br />
+                      <em>{datos.comentario}</em>
+                    </li>
+                  );
+                })}
               </ul>
               <button onClick={() => eliminarEvaluacion(evalItem.id)}>Eliminar</button>
             </div>
