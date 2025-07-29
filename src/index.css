@@ -1,48 +1,79 @@
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f8f8f8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  background: #f3f3f3;
   margin: 0;
-  padding: 20px;
+  padding: 2rem;
   color: #333;
 }
 
 .container {
-  max-width: 900px;
-  margin: auto;
-  background: #fff;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 0 auto;
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 .logo {
-  width: 150px;
+  max-width: 120px;
   display: block;
-  margin: 0 auto 20px auto;
+  margin: 0 auto 1rem;
 }
 
-.main-title {
+h1, h2 {
   text-align: center;
-  font-size: 28px;
-  margin-bottom: 30px;
 }
 
-.section-title {
-  font-size: 22px;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #eee;
-  padding-bottom: 5px;
+input, textarea {
+  display: block;
+  width: 100%;
+  margin-bottom: 1rem;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
 }
 
-.promedios-list {
+textarea {
+  resize: vertical;
+  height: 60px;
+}
+
+button {
+  background-color: #333;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: inherit;
+  margin-top: 1rem;
+}
+
+button:hover {
+  background-color: #555;
+}
+
+span {
+  font-size: 1.5rem;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  display: inline-block;
+}
+
+span:hover {
+  transform: scale(1.3);
+  filter: brightness(1.3);
+}
+
+.promedios-list, .eval-list {
   list-style: none;
-  padding-left: 0;
-  margin-bottom: 40px;
+  padding: 0;
+  margin: 1rem 0;
 }
 
-.promedio-item {
-  font-size: 18px;
-  margin: 12px 0;
+.promedios-list li, .eval-item {
+  margin-bottom: 0.5rem;
 }
 
 .puntuacion-baja {
@@ -52,73 +83,36 @@ body {
 
 .puntuacion-normal {
   color: #333;
-  font-weight: bold;
 }
 
 .nota-mejora {
+  margin-left: 0.5rem;
   color: red;
-  font-size: 14px;
-  margin-left: 10px;
-}
-
-.dashboard-list {
-  display: flex;
-  flex-direction: column;
-  gap: 30px;
-}
-
-.dashboard-item {
-  background: #fafafa;
-  padding: 20px;
-  border-radius: 10px;
-  border: 1px solid #ddd;
+  font-style: italic;
+  font-size: 0.9rem;
 }
 
 .eval-nombre {
-  margin-top: 0;
-  font-size: 20px;
-  border-bottom: 1px solid #ccc;
-  padding-bottom: 5px;
-  margin-bottom: 10px;
-}
-
-.eval-list {
-  list-style: none;
-  padding-left: 0;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+  font-size: 1.2rem;
 }
 
 .eval-item {
-  margin-bottom: 12px;
-  line-height: 1.6;
-}
-
-.eval-clave {
-  font-weight: bold;
+  margin-bottom: 0.75rem;
 }
 
 .eval-comentario {
-  display: block;
+  font-size: 0.85rem;
   color: #666;
-  font-style: italic;
-  margin-top: 4px;
-}
-
-.eval-puntos {
-  font-weight: bold;
-  margin-left: 6px;
 }
 
 .btn-eliminar {
-  background-color: #e63946;
-  color: white;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 6px;
-  cursor: pointer;
-  margin-top: 10px;
+  background-color: #b00;
+  margin-top: 1rem;
 }
 
 .btn-eliminar:hover {
-  background-color: #c71d2d;
+  background-color: #d00;
 }
 
