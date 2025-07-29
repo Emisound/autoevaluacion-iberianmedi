@@ -30,7 +30,10 @@ const iconos = {
   "Streaming": "📡",
   "Iluminación": "💡",
   "Arte": "🖼️",
-  "Director de Fotografía": "🎞️"
+  "Director de Fotografía": "🎞️",
+  "Subtítulos": "🔤",
+  "Fotografía": "📷",
+  "Dron": "🛸"
 };
 
 function Dashboard() {
@@ -129,6 +132,5 @@ function Dashboard() {
 }
 
 export default Dashboard;
-
 
 
