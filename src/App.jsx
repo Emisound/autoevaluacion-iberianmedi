@@ -1,9 +1,7 @@
-import './index.css';
 import { useState } from 'react';
+import './index.css';
 import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, addDoc } from 'firebase/firestore';
-import { useNavigate } from 'react-router-dom';
-import logo from './assets/IM_icon_color_fondo_negro.png';
 
 const firebaseConfig = {
   apiKey: "AIzaSyD0oQUhF2Fpg4u_m5mnebR7BLJkKfKFNHQ",
@@ -18,133 +16,151 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const competencias = [
-  { categoria: "Edición", subcategorias: ["Shorts para redes", "Video corporativo", "Podcast", "Montaje Recaps"], icono: "🎬" },
-  { categoria: "Operador de cámara", subcategorias: [""], icono: "🎥" },
-  { categoria: "Grafismos", subcategorias: [""], icono: "💻" },
-  { categoria: "Animación 2D", subcategorias: [""], icono: "🌊" },
-  { categoria: "After Effects", subcategorias: [""], icono: "✨" },
-  { categoria: "Color", subcategorias: [""], icono: "🎨" },
-  { categoria: "IA", subcategorias: [""], icono: "🤖" },
-  { categoria: "Realización", subcategorias: ["Dirección de pieza audiovisual"], icono: "🎬" },
-  { categoria: "Realización en vivo", subcategorias: [""], icono: "📺" },
-  { categoria: "Streaming", subcategorias: [""], icono: "📡" },
-  { categoria: "Iluminación", subcategorias: [""], icono: "💡" },
-  { categoria: "Arte", subcategorias: [""], icono: "🖼️" },
-  { categoria: "Director de Fotografía", subcategorias: [""], icono: "🎞️" },
-  { categoria: "Subtítulos", subcategorias: [""], icono: "🔤" },
-  { categoria: "Fotografía", subcategorias: [""], icono: "📷" },
-  { categoria: "Dron", subcategorias: [""], icono: "🛸" }
-];
+const categorias = {
+  "Edición": [
+    "Shorts para redes",
+    "Video corporativo",
+    "Podcast",
+    "Montaje Recaps"
+  ],
+  "Operador de cámara": [],
+  "Grafismos": [],
+  "Animación 2D": [],
+  "After Effects": [],
+  "Color": [],
+  "IA": [],
+  "Realización": ["Dirección de pieza audiovisual"],
+  "Realización en vivo": [],
+  "Streaming": [],
+  "Iluminación": [],
+  "Arte": [],
+  "Director de Fotografía": [],
+  "Subtítulos": [],
+  "Fotografía": [],
+  "Dron": []
+};
+
+const iconos = {
+  "Edición": "🎬",
+  "Operador de cámara": "🎥",
+  "Grafismos": "💻",
+  "Animación 2D": "🌊",
+  "After Effects": "✨",
+  "Color": "🎨",
+  "IA": "🤖",
+  "Realización": "🎬",
+  "Realización en vivo": "📺",
+  "Streaming": "📡",
+  "Iluminación": "💡",
+  "Arte": "🖼️",
+  "Director de Fotografía": "🎞️",
+  "Subtítulos": "🔤",
+  "Fotografía": "📷",
+  "Dron": "🛸"
+};
 
 function App() {
-  const [formulario, setFormulario] = useState({});
-  const [nombre, setNombre] = useState("");
-  const [hover, setHover] = useState({});
-  const [adminID, setAdminID] = useState("");
-  const [adminPass, setAdminPass] = useState("");
-  const navigate = useNavigate();
+  const [nombre, setNombre] = useState('');
+  const [respuestas, setRespuestas] = useState({});
 
-  const manejarCambio = (clave, valor) => {
-    setFormulario(prev => ({
+  const handleEmojiClick = (categoria, subcategoria, nivel) => {
+    const clave = subcategoria ? `${categoria} - ${subcategoria}` : `${categoria}`;
+    setRespuestas(prev => ({
       ...prev,
       [clave]: {
-        ...prev[clave],
-        valor
+        valor: nivel,
+        comentario: prev[clave]?.comentario || ""
       }
     }));
   };
 
-  const manejarComentario = (clave, comentario) => {
-    setFormulario(prev => ({
+  const handleComentarioChange = (categoria, subcategoria, comentario) => {
+    const clave = subcategoria ? `${categoria} - ${subcategoria}` : `${categoria}`;
+    setRespuestas(prev => ({
       ...prev,
       [clave]: {
-        ...prev[clave],
+        valor: prev[clave]?.valor || 0,
         comentario
       }
     }));
   };
 
-  const enviarFormulario = async (e) => {
-    e.preventDefault();
-    try {
-      await addDoc(collection(db, "auto-evaluaciones"), {
-        nombre,
-        evaluaciones: formulario,
-        fecha: new Date().toISOString()
-      });
-      alert("¡Autoevaluación enviada con éxito!");
-      setNombre("");
-      setFormulario({});
-    } catch (error) {
-      console.error("Error al enviar: ", error);
-      alert("Hubo un error al enviar el formulario.");
-    }
-  };
-
-  const accederComoAdmin = () => {
-    if (adminID === "administrador" && adminPass === "Khloe") {
-      navigate("/dashboard");
-    } else {
-      alert("Credenciales incorrectas");
-    }
+  const enviar = async () => {
+    if (!nombre) return alert("Pon tu nombre");
+    await addDoc(collection(db, "auto-evaluaciones"), {
+      nombre,
+      evaluaciones: respuestas
+    });
+    alert("Enviado correctamente");
+    setNombre('');
+    setRespuestas({});
   };
 
   return (
     <div className="container">
-      <img src={logo} alt="Logo Iberian Media" className="logo" />
       <h1>Autoevaluación de Filmmakers</h1>
-      <form onSubmit={enviarFormulario}>
-        <label>Tu nombre</label>
-        <input type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
-
-        {competencias.map((comp) =>
-          comp.subcategorias.map((sub, i) => {
-            const clave = `${comp.categoria} - ${sub || comp.categoria}`;
-            const datos = formulario[clave] || {};
-            const hoverValue = hover[clave] || 0;
-
+      <label>Tu nombre</label>
+      <input value={nombre} onChange={e => setNombre(e.target.value)} />
+      {Object.entries(categorias).map(([categoria, subcategorias]) => (
+        subcategorias.length > 0 ? (
+          subcategorias.map(sub => {
+            const clave = `${categoria} - ${sub}`;
+            const valor = respuestas[clave]?.valor || 0;
+            const icono = iconos[categoria] || "⭐";
             return (
               <div key={clave}>
-                <label>{clave}</label>
-                <div className="emoji-container">
-                  {[1, 2, 3, 4, 5].map((nivel) => (
-                    <span
-                      key={nivel}
-                      className={`emoji-button ${(hoverValue >= nivel || datos.valor >= nivel) ? "selected" : ""}`}
-                      onClick={() => manejarCambio(clave, nivel)}
-                      onMouseEnter={() => setHover(prev => ({ ...prev, [clave]: nivel }))}
-                      onMouseLeave={() => setHover(prev => ({ ...prev, [clave]: 0 }))}
-                      style={{
-                        opacity: (hoverValue >= nivel || datos.valor >= nivel) ? 1 : 0.3,
-                        transform: hoverValue === nivel ? 'scale(1.2)' : 'scale(1)',
-                        transition: 'transform 0.2s ease, opacity 0.3s ease'
-                      }}
-                    >
-                      {comp.icono}
-                    </span>
-                  ))}
-                </div>
+                <strong>{clave}</strong><br />
+                {[1,2,3,4,5].map(n => (
+                  <span
+                    key={n}
+                    style={{ cursor: 'pointer', opacity: n <= valor ? 1 : 0.3 }}
+                    onClick={() => handleEmojiClick(categoria, sub, n)}
+                  >
+                    {icono}
+                  </span>
+                ))}
+                <br />
                 <textarea
                   placeholder="Comentario opcional"
-                  value={datos.comentario || ""}
-                  onChange={e => manejarComentario(clave, e.target.value)}
+                  value={respuestas[clave]?.comentario || ''}
+                  onChange={e => handleComentarioChange(categoria, sub, e.target.value)}
                 />
               </div>
             );
           })
-        )}
-        <button type="submit">Enviar</button>
-      </form>
-
-      <div className="admin-login">
-        <h2>Acceso Administrador</h2>
-        <input type="text" placeholder="ID" value={adminID} onChange={e => setAdminID(e.target.value)} />
-        <input type="password" placeholder="Contraseña" value={adminPass} onChange={e => setAdminPass(e.target.value)} />
-        <button onClick={accederComoAdmin}>Acceder</button>
-      </div>
+        ) : (
+          (() => {
+            const clave = categoria;
+            const valor = respuestas[clave]?.valor || 0;
+            const icono = iconos[categoria] || "⭐";
+            return (
+              <div key={clave}>
+                <strong>{clave}</strong><br />
+                {[1,2,3,4,5].map(n => (
+                  <span
+                    key={n}
+                    style={{ cursor: 'pointer', opacity: n <= valor ? 1 : 0.3 }}
+                    onClick={() => handleEmojiClick(categoria, null, n)}
+                  >
+                    {icono}
+                  </span>
+                ))}
+                <br />
+                <textarea
+                  placeholder="Comentario opcional"
+                  value={respuestas[clave]?.comentario || ''}
+                  onChange={e => handleComentarioChange(categoria, null, e.target.value)}
+                />
+              </div>
+            );
+          })()
+        )
+      ))}
+      <br />
+      <button onClick={enviar}>Enviar</button>
     </div>
   );
 }
 
 export default App;
+
