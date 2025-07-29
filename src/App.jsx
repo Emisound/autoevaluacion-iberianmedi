@@ -1,7 +1,7 @@
 import './index.css';
 import { useState } from 'react';
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc } from "firebase/firestore";
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
 import logo from './assets/IM_icon_color_fondo_negro.png';
 
 const firebaseConfig = {
@@ -18,79 +18,20 @@ const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
 const competencias = [
-  {
-    categoria: "Edición",
-    subcategorias: [
-      "Shorts para redes",
-      "Video corporativo",
-      "Podcast",
-      "Montaje Recaps",
-    ],
-    icono: "🎬"
-  },
-  {
-    categoria: "Operador de cámara",
-    subcategorias: [""],
-    icono: "🎥"
-  },
-  {
-    categoria: "Grafismos",
-    subcategorias: [""],
-    icono: "💻"
-  },
-  {
-    categoria: "Animación 2D",
-    subcategorias: [""],
-    icono: "🌊"
-  },
-  {
-    categoria: "After Effects",
-    subcategorias: [""],
-    icono: "✨"
-  },
-  {
-    categoria: "Color",
-    subcategorias: [""],
-    icono: "🎨"
-  },
-  {
-    categoria: "IA",
-    subcategorias: [""],
-    icono: "🤖"
-  },
-  {
-    categoria: "Realización",
-    subcategorias: ["Dirección de pieza audiovisual"],
-    icono: "🎬"
-  },
-  {
-    categoria: "Realización en vivo",
-    subcategorias: [""],
-    icono: "📺"
-  },
-  {
-    categoria: "Streaming",
-    subcategorias: [""],
-    icono: "📡"
-  },
-  {
-    categoria: "Iluminación",
-    subcategorias: [""],
-    icono: "💡"
-  },
-  {
-    categoria: "Arte",
-    subcategorias: [""],
-    icono: "🖼️"
-  },
-  {
-    categoria: "Director de Fotografía",
-    subcategorias: [""],
-    icono: "🎞️"
-  },
+  { categoria: "Edición", subcategorias: ["Shorts para redes", "Video corporativo", "Podcast", "Montaje Recaps"], icono: "🎬" },
+  { categoria: "Operador de cámara", subcategorias: [""], icono: "🎥" },
+  { categoria: "Grafismos", subcategorias: [""], icono: "💻" },
+  { categoria: "Animación 2D", subcategorias: [""], icono: "🌊" },
+  { categoria: "After Effects", subcategorias: [""], icono: "✨" },
+  { categoria: "Color", subcategorias: [""], icono: "🎨" },
+  { categoria: "IA", subcategorias: [""], icono: "🤖" },
+  { categoria: "Realización", subcategorias: ["Dirección de pieza audiovisual"], icono: "🎬" },
+  { categoria: "Realización en vivo", subcategorias: [""], icono: "📺" },
+  { categoria: "Streaming", subcategorias: [""], icono: "📡" },
+  { categoria: "Iluminación", subcategorias: [""], icono: "💡" },
+  { categoria: "Arte", subcategorias: [""], icono: "🖼️" },
+  { categoria: "Director de Fotografía", subcategorias: [""], icono: "🎞️" }
 ];
-
-const niveles = ["😵", "😕", "😐", "😊", "🤩"];
 
 function App() {
   const [formulario, setFormulario] = useState({});
@@ -139,12 +80,7 @@ function App() {
       <h1>Autoevaluación de Filmmakers</h1>
       <form onSubmit={enviarFormulario}>
         <label>Tu nombre</label>
-        <input
-          type="text"
-          value={nombre}
-          onChange={e => setNombre(e.target.value)}
-          required
-        />
+        <input type="text" value={nombre} onChange={e => setNombre(e.target.value)} required />
 
         {competencias.map((comp) =>
           comp.subcategorias.map((sub, i) => {
@@ -153,17 +89,17 @@ function App() {
 
             return (
               <div key={clave}>
-                <label>{comp.icono} {clave}</label>
+                <label>{clave}</label>
                 <div className="emoji-container">
-                  {niveles.map((nivel, idx) => (
-                    <button
-                      key={idx}
-                      type="button"
-                      className={`emoji-button ${datos.valor === nivel ? "selected" : ""}`}
+                  {[1, 2, 3, 4, 5].map((nivel) => (
+                    <span
+                      key={nivel}
+                      className={`emoji-button ${datos.valor >= nivel ? "selected" : ""}`}
                       onClick={() => manejarCambio(clave, nivel)}
+                      onMouseOver={() => manejarCambio(clave, nivel)}
                     >
-                      {nivel}
-                    </button>
+                      {comp.icono}
+                    </span>
                   ))}
                 </div>
                 <textarea
@@ -182,3 +118,4 @@ function App() {
 }
 
 export default App;
+
