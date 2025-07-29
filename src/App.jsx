@@ -36,6 +36,7 @@ const competencias = [
 function App() {
   const [formulario, setFormulario] = useState({});
   const [nombre, setNombre] = useState("");
+  const [hover, setHover] = useState({});
 
   const manejarCambio = (clave, valor) => {
     setFormulario(prev => ({
@@ -86,6 +87,7 @@ function App() {
           comp.subcategorias.map((sub, i) => {
             const clave = `${comp.categoria} - ${sub || comp.categoria}`;
             const datos = formulario[clave] || {};
+            const hoverValue = hover[clave] || 0;
 
             return (
               <div key={clave}>
@@ -94,9 +96,12 @@ function App() {
                   {[1, 2, 3, 4, 5].map((nivel) => (
                     <span
                       key={nivel}
-                      className={`emoji-button ${datos.valor >= nivel ? "selected" : ""}`}
+                      className={`emoji-button ${
+                        (hoverValue >= nivel || datos.valor >= nivel) ? "selected" : ""
+                      }`}
                       onClick={() => manejarCambio(clave, nivel)}
-                      onMouseOver={() => manejarCambio(clave, nivel)}
+                      onMouseEnter={() => setHover(prev => ({ ...prev, [clave]: nivel }))}
+                      onMouseLeave={() => setHover(prev => ({ ...prev, [clave]: 0 }))}
                     >
                       {comp.icono}
                     </span>
