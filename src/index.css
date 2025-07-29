@@ -1,124 +1,124 @@
-/* index.css */
-
 body {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  background-color: #f5f6fa;
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f8f8;
   margin: 0;
-  padding: 0;
+  padding: 20px;
+  color: #333;
 }
 
 .container {
-  max-width: 960px;
-  margin: 2rem auto;
+  max-width: 900px;
+  margin: auto;
   background: #fff;
-  padding: 2rem;
+  padding: 30px;
   border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
 }
 
 .logo {
+  width: 150px;
   display: block;
-  margin: 0 auto 1rem auto;
-  max-width: 120px;
+  margin: 0 auto 20px auto;
 }
 
 .main-title {
   text-align: center;
-  font-size: 2rem;
-  margin-bottom: 2rem;
-  color: #333;
+  font-size: 28px;
+  margin-bottom: 30px;
 }
 
 .section-title {
-  font-size: 1.4rem;
-  margin-bottom: 1rem;
-  color: #444;
-  border-bottom: 2px solid #ddd;
-  padding-bottom: 0.3rem;
+  font-size: 22px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 5px;
 }
 
 .promedios-list {
   list-style: none;
   padding-left: 0;
-  margin-bottom: 2rem;
+  margin-bottom: 40px;
 }
 
 .promedio-item {
-  margin-bottom: 0.5rem;
-  font-size: 1rem;
-  line-height: 1.4;
+  font-size: 18px;
+  margin: 12px 0;
 }
 
 .puntuacion-baja {
-  color: #c0392b;
+  color: red;
   font-weight: bold;
 }
 
 .puntuacion-normal {
-  color: #2c3e50;
-}
-
-.nota-mejora {
-  margin-left: 0.5rem;
-  font-size: 0.9rem;
-  color: #c0392b;
+  color: #333;
   font-weight: bold;
 }
 
+.nota-mejora {
+  color: red;
+  font-size: 14px;
+  margin-left: 10px;
+}
+
+.dashboard-list {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+}
+
 .dashboard-item {
-  border: 1px solid #e0e0e0;
-  background-color: #fafafa;
-  padding: 1rem;
-  margin-bottom: 2rem;
-  border-radius: 8px;
+  background: #fafafa;
+  padding: 20px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
 }
 
 .eval-nombre {
-  font-size: 1.2rem;
-  margin-bottom: 0.8rem;
-  color: #2c3e50;
+  margin-top: 0;
+  font-size: 20px;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 5px;
+  margin-bottom: 10px;
 }
 
 .eval-list {
   list-style: none;
   padding-left: 0;
-  margin-bottom: 1rem;
 }
 
 .eval-item {
-  margin-bottom: 0.6rem;
-  line-height: 1.5;
+  margin-bottom: 12px;
+  line-height: 1.6;
 }
 
 .eval-clave {
   font-weight: bold;
-  color: #333;
-}
-
-.eval-puntos {
-  font-weight: bold;
-  margin-left: 0.3rem;
 }
 
 .eval-comentario {
   display: block;
-  font-size: 0.85rem;
   color: #666;
-  margin-top: 0.2rem;
-  padding-left: 1.5rem;
+  font-style: italic;
+  margin-top: 4px;
+}
+
+.eval-puntos {
+  font-weight: bold;
+  margin-left: 6px;
 }
 
 .btn-eliminar {
-  background-color: #e74c3c;
+  background-color: #e63946;
   color: white;
   border: none;
-  padding: 0.5rem 1rem;
+  padding: 8px 16px;
   border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
-  transition: background-color 0.3s ease;
+  margin-top: 10px;
 }
 
 .btn-eliminar:hover {
-  background-color: #c0392b;
+  background-color: #c71d2d;
 }
+
