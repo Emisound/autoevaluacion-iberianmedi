@@ -84,11 +84,17 @@ function Dashboard() {
         <div className="dashboard-promedios">
           <h2>Promedio por Categoría</h2>
           <ul>
-            {Object.entries(promedios).map(([categoria, promedio]) => (
-              <li key={categoria}>
-                <strong>{categoria}</strong>: {iconos[categoria] || '⭐'} ({promedio}/5)
-              </li>
-            ))}
+            {Object.entries(promedios).map(([categoria, promedio]) => {
+              const icono = iconos[categoria] || '⭐';
+              const promedioValor = parseFloat(promedio);
+              const colorStyle = promedioValor <= 2.99 ? { color: 'red', fontWeight: 'bold' } : {};
+              return (
+                <li key={categoria}>
+                  <strong>{categoria}</strong>: {icono} <span style={colorStyle}>({promedio}/5)</span>
+                  {promedioValor <= 2.99 && <span style={{ color: 'red', marginLeft: '8px' }}>Necesita mejorar</span>}
+                </li>
+              );
+            })}
           </ul>
         </div>
       )}
@@ -123,4 +129,5 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
 
