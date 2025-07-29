@@ -31,7 +31,10 @@ const competencias = [
   { categoria: "Streaming", subcategorias: [""], icono: "📡" },
   { categoria: "Iluminación", subcategorias: [""], icono: "💡" },
   { categoria: "Arte", subcategorias: [""], icono: "🖼️" },
-  { categoria: "Director de Fotografía", subcategorias: [""], icono: "🎞️" }
+  { categoria: "Director de Fotografía", subcategorias: [""], icono: "🎞️" },
+  { categoria: "Subtítulos", subcategorias: [""], icono: "🔤" },
+  { categoria: "Fotografía", subcategorias: [""], icono: "📷" },
+  { categoria: "Dron", subcategorias: [""], icono: "🛸" }
 ];
 
 function App() {
@@ -145,5 +148,3 @@ function App() {
 }
 
 export default App;
-
-
