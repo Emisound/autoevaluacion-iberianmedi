@@ -59,8 +59,16 @@ function Dashboard() {
   respuestas.forEach(resp => {
     Object.entries(resp.evaluaciones).forEach(([clave, { valor }]) => {
       const categoria = clave.split(" - ")[0];
-      promedios[categoria] = (promedios[categoria] || 0) + valor;
-      conteos[categoria] = (conteos[categoria] || 0) + 1;
+
+      // Extraer solo el número del valor (por si viene como string tipo “2 – Nivel básico / Principiante”)
+      const valorNumerico = typeof valor === 'number'
+        ? valor
+        : parseInt(String(valor).trim().charAt(0));
+
+      if (!isNaN(valorNumerico)) {
+        promedios[categoria] = (promedios[categoria] || 0) + valorNumerico;
+        conteos[categoria] = (conteos[categoria] || 0) + 1;
+      }
     });
   });
 
@@ -85,16 +93,25 @@ function Dashboard() {
         ))}
       </ul>
 
-      {respuestas.map((resp, index) => (
+      {respuestas.map((resp) => (
         <div key={resp.id}>
           <h4>{resp.nombre}</h4>
           <ul>
-            {Object.entries(resp.evaluaciones).map(([clave, { valor, comentario }]) => (
-              <li key={clave}>
-                <strong>{clave}:</strong> {emojis[clave.split(" - ")[0]] || ''} ({valor}/5)
-                {comentario && <em> – {comentario}</em>}
-              </li>
-            ))}
+            {Object.entries(resp.evaluaciones).map(([clave, { valor, comentario }]) => {
+              const categoria = clave.split(" - ")[0];
+
+              // Extraer solo el número del valor para mostrarlo correctamente
+              const valorNumerico = typeof valor === 'number'
+                ? valor
+                : parseInt(String(valor).trim().charAt(0));
+
+              return (
+                <li key={clave}>
+                  <strong>{clave}:</strong> {emojis[categoria] || ''} ({valorNumerico}/5)
+                  {comentario && <em> – {comentario}</em>}
+                </li>
+              );
+            })}
           </ul>
           <button onClick={() => eliminar(resp.id)}>Eliminar</button>
         </div>
