@@ -1,7 +1,7 @@
 import './index.css';
 import { useEffect, useState } from 'react';
-import { initializeApp } from 'firebase/app';
 import { getFirestore, collection, getDocs, deleteDoc, doc } from 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
 import logo from './assets/IM_icon_color_fondo_negro.png';
 
 const firebaseConfig = {
@@ -17,131 +17,93 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-const iconos = {
+const emojis = {
   "Edición": "🎬",
+  "After Effects": "✨",
+  "Streaming": "📡",
+  "Subtítulos": "🔤",
+  "Fotografía": "📷",
+  "Realización": "🎬",
+  "Iluminación": "💡",
   "Operador de cámara": "🎥",
   "Grafismos": "💻",
   "Animación 2D": "🌊",
-  "After Effects": "✨",
   "Color": "🎨",
   "IA": "🤖",
-  "Realización": "🎬",
   "Realización en vivo": "📺",
-  "Streaming": "📡",
-  "Iluminación": "💡",
   "Arte": "🖼️",
   "Director de Fotografía": "🎞️",
-  "Subtítulos": "🔤",
-  "Fotografía": "📷",
   "Dron": "🛸"
 };
 
 function Dashboard() {
-  const [evaluaciones, setEvaluaciones] = useState([]);
-  const [promedios, setPromedios] = useState({});
+  const [respuestas, setRespuestas] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      const querySnapshot = await getDocs(collection(db, "auto-evaluaciones"));
-      const data = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-      setEvaluaciones(data);
-
-      const acumulador = {};
-      const conteo = {};
-
-      data.forEach((evalItem) => {
-        Object.entries(evalItem.evaluaciones).forEach(([clave, datos]) => {
-          const categoria = clave.split(" - ")[0];
-          if (!acumulador[categoria]) {
-            acumulador[categoria] = 0;
-            conteo[categoria] = 0;
-          }
-          acumulador[categoria] += datos.valor;
-          conteo[categoria]++;
-        });
-      });
-
-      const calculado = {};
-      Object.keys(acumulador).forEach(categoria => {
-        calculado[categoria] = (acumulador[categoria] / conteo[categoria]).toFixed(2);
-      });
-      setPromedios(calculado);
+      const snapshot = await getDocs(collection(db, "auto-evaluaciones"));
+      const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setRespuestas(data);
     };
     fetchData();
   }, []);
 
-  const eliminarEvaluacion = async (id) => {
-    const confirmacion = window.confirm("¿Estás seguro de que quieres eliminar esta evaluación?");
-    if (confirmacion) {
-      await deleteDoc(doc(db, "auto-evaluaciones", id));
-      setEvaluaciones(evaluaciones.filter(e => e.id !== id));
-    }
+  const eliminar = async (id) => {
+    await deleteDoc(doc(db, "auto-evaluaciones", id));
+    setRespuestas(prev => prev.filter(r => r.id !== id));
   };
+
+  const promedios = {};
+  const conteos = {};
+
+  respuestas.forEach(resp => {
+    Object.entries(resp.evaluaciones).forEach(([clave, { valor }]) => {
+      const categoria = clave.split(" - ")[0];
+      promedios[categoria] = (promedios[categoria] || 0) + valor;
+      conteos[categoria] = (conteos[categoria] || 0) + 1;
+    });
+  });
+
+  Object.keys(promedios).forEach(cat => {
+    promedios[cat] = promedios[cat] / conteos[cat];
+  });
 
   return (
     <div className="container">
-      <img src={logo} alt="Logo Iberian Media" className="logo" />
-      <h1 className="main-title">Dashboard de Administrador</h1>
+      <img src={logo} alt="Logo" className="logo" />
+      <h2>Dashboard de Administrador</h2>
 
-      <div className="explicativo">
-        <p>Por favor, rellena honestamente tus aptitudes en cada categoría. Utiliza la siguiente guía para puntuarte:</p>
-        <ul>
-          <li><strong>1️⃣ – Sin experiencia / Nulo:</strong> No tengo conocimientos o experiencia práctica en esta área. Nunca lo he hecho o no sé cómo empezar.</li>
-          <li><strong>2️⃣ – Nivel básico / Principiante:</strong> He hecho alguna prueba o tengo una idea general, pero me falta confianza y necesito apoyo constante. Requiere supervisión.</li>
-          <li><strong>3️⃣ – Nivel intermedio / Autónomo:</strong> Puedo trabajar en esta tarea de forma autónoma en contextos sencillos. Me manejo bien, aunque aún me falta fluidez en situaciones más complejas.</li>
-          <li><strong>4️⃣ – Nivel avanzado / Experto funcional:</strong> Domino esta aptitud con seguridad. Soy eficiente, puedo resolver problemas y tengo criterio propio. Puedo aportar valor y mejorar procesos.</li>
-          <li><strong>5️⃣ – Especialista / Referente:</strong> Soy experto en esta área. Domino todas sus facetas, puedo liderar proyectos relacionados y ayudar a otros a mejorar. Me consultan por mi criterio.</li>
-        </ul>
-      </div>
+      <h3>Promedio por Categoría</h3>
+      <ul>
+        {Object.entries(promedios).map(([categoria, promedio]) => (
+          <li key={categoria}>
+            <strong>{categoria}:</strong> <span style={{ color: promedio <= 2.99 ? 'red' : 'black' }}>
+              {emojis[categoria] || ''} {promedio.toFixed(2)}/5
+            </span>
+            {promedio <= 2.99 && <span style={{ color: 'red', marginLeft: 8 }}>Necesita mejorar</span>}
+          </li>
+        ))}
+      </ul>
 
-      {Object.keys(promedios).length > 0 && (
-        <div className="dashboard-promedios">
-          <h2 className="section-title">Promedio por Categoría</h2>
-          <ul className="promedios-list">
-            {Object.entries(promedios).map(([categoria, promedio]) => {
-              const icono = iconos[categoria] || '⭐';
-              const promedioValor = parseFloat(promedio);
-              const isBajo = promedioValor <= 2.99;
-              return (
-                <li key={categoria} className="promedio-item">
-                  <strong>{categoria}</strong>: {icono} <span className={isBajo ? "puntuacion-baja" : "puntuacion-normal"}>({promedio}/5)</span>
-                  {isBajo && <span className="nota-mejora">Necesita mejorar</span>}
-                </li>
-              );
-            })}
+      {respuestas.map((resp, index) => (
+        <div key={resp.id}>
+          <h4>{resp.nombre}</h4>
+          <ul>
+            {Object.entries(resp.evaluaciones).map(([clave, { valor, comentario }]) => (
+              <li key={clave}>
+                <strong>{clave}:</strong> {emojis[clave.split(" - ")[0]] || ''} ({valor}/5)
+                {comentario && <em> – {comentario}</em>}
+              </li>
+            ))}
           </ul>
+          <button onClick={() => eliminar(resp.id)}>Eliminar</button>
         </div>
-      )}
-
-      {evaluaciones.length === 0 ? (
-        <p>No hay evaluaciones registradas todavía.</p>
-      ) : (
-        <div className="dashboard-list">
-          {evaluaciones.map((evalItem) => (
-            <div key={evalItem.id} className="dashboard-item">
-              <h2 className="eval-nombre">{evalItem.nombre}</h2>
-              <ul className="eval-list">
-                {Object.entries(evalItem.evaluaciones).map(([clave, datos]) => {
-                  const categoria = clave.split(" - ")[0];
-                  const icono = iconos[categoria] || "⭐";
-                  return (
-                    <li key={clave} className="eval-item">
-                      <span className="eval-clave">{clave}</span>: {icono.repeat(datos.valor)} <span className="eval-puntos">({datos.valor}/5)</span>
-                      <br />
-                      <em className="eval-comentario">{datos.comentario}</em>
-                    </li>
-                  );
-                })}
-              </ul>
-              <button className="btn-eliminar" onClick={() => eliminarEvaluacion(evalItem.id)}>Eliminar</button>
-            </div>
-          ))}
-        </div>
-      )}
+      ))}
     </div>
   );
 }
 
 export default Dashboard;
+
 
 
