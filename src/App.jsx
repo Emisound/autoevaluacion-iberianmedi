@@ -112,13 +112,13 @@ function App() {
 
         {competencias.map((comp) =>
           comp.subcategorias.map((sub, i) => {
-            const clave = `${comp.categoria} - ${sub || comp.categoria}`;
+            const clave = sub ? `${comp.categoria} - ${sub}` : comp.categoria;
             const datos = formulario[clave] || {};
             const hoverValue = hover[clave] || 0;
 
             return (
               <div key={clave}>
-                <label>{clave}</label>
+                <label>{sub ? `${comp.categoria} - ${sub}` : comp.categoria}</label>
                 <div className="emoji-container">
                   {[1, 2, 3, 4, 5].map((nivel) => (
                     <span
